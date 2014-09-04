@@ -8,6 +8,9 @@ import android.opengl.GLES20;
  * Used to draw circles or regular polygons
  */
 public class Circle extends Sprite {
+	/**
+	 * number of edges of the regular polygons
+	 */
     protected int precision;
     
     /** Constructor
@@ -49,14 +52,14 @@ public class Circle extends Sprite {
 	/** @Override */
 	protected void setCoords(){
     	mCoords = new float[3*(precision+2)];
-		float part = 2.f*3.1416f/(float)(precision);
-		mCoords[0] = x+h;
+		float part = 6.283185307f/(float)(precision);
+		/*mCoords[0] = x+h;
 		mCoords[1] = y+h;
-		mCoords[2] = 0.f;
+		mCoords[2] = 0.f;*/
 		
-		for(int i=1;i<=precision+1;i++){
-			mCoords[3*i+0] = x+h+h*(float) (Math.cos((i-1)*part));
-			mCoords[3*i+1] = y+h+1.5f*h*(float) (Math.sin((i-1)*part));
+		for(int i=0;i<=precision+1;i++){
+			mCoords[3*i+0] = x+h*(float) (Math.cos((i-1)*part));
+			mCoords[3*i+1] = y+h*(float) (Math.sin((i-1)*part));
 			mCoords[3*i+2] = 0.f;
 		}
 	}

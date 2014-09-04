@@ -8,6 +8,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,7 +17,9 @@ import android.widget.TextView;
 public class GameActivity2 extends Activity {
 	private TextView info = null;
 	private GLSurfaceView mSurfaceView = null;
-	private Renderer mRenderer = null;
+	private DemoGame game = null;
+	float lastx = 0.0f;
+	float lasty = 0.0f;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +33,11 @@ public class GameActivity2 extends Activity {
 			mSurfaceView = new GLSurfaceView(this);
 			mSurfaceView.setEGLContextClientVersion(2);
 			//mSurfaceView.setPreserveEGLContextOnPause(true);
-			mRenderer = new Renderer(this.getApplicationContext());
-			mSurfaceView.setRenderer(mRenderer);
+			game = new DemoGame(this.getApplicationContext());
+			mSurfaceView.setRenderer(game);
 			setContentView(mSurfaceView);
 		} else {
-			// Time to get a new phone, OpenGL ES 2.0 not
-			// supported.
+			// OpenGL ES 2.0 not  supported.
 			info = new TextView(this);
 			info.setText("OpenGL ES 2.0 not supported ... ");
 			setContentView(info);
@@ -52,10 +54,6 @@ public class GameActivity2 extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		/*
-		 * The activity must call the GL surface view's onResume() on activity
-		 * onResume().
-		 */
 		if (mSurfaceView != null) {
 			mSurfaceView.onResume();
 		}
@@ -64,11 +62,6 @@ public class GameActivity2 extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
-		/*
-		 * The activity must call the GL surface view's onPause() on activity
-		 * onPause().
-		 */
 		if (mSurfaceView != null) {
 			mSurfaceView.onPause();
 		}
@@ -77,11 +70,11 @@ public class GameActivity2 extends Activity {
 	float mPreviousY;
 	
 	protected int nbPointer = 0;
-	private SparseArray<Integer> mActivePointers = new SparseArray<Integer>();
+	private SparseIntArray mActivePointers = new SparseIntArray();
 
 	@Override
     public boolean onTouchEvent(MotionEvent e) {
-		
+
 	    int pointerIndex = e.getActionIndex();
 	    int pointerId = e.getPointerId(pointerIndex);  // get pointer ID
 	    int maskedAction = e.getActionMasked();
@@ -90,12 +83,20 @@ public class GameActivity2 extends Activity {
 		    case MotionEvent.ACTION_POINTER_DOWN: {
 		    	nbPointer++;
 		    	mActivePointers.put(pointerId,0);
+		    	final float x = e.getX(nbPointer-1), y = mSurfaceView.getHeight()-e.getY(nbPointer-1);
+		    	lastx = x;
+	    		lasty = y;
 		    	break;
 		    }
 		    case MotionEvent.ACTION_MOVE: { // a pointer was moved
 		    	for (int size = e.getPointerCount(), i = 0; i < size; i++) {
 		    		int id = e.getPointerId(i);
 		    		int pos = mActivePointers.get(e.getPointerId(i));
+		    		final float x = e.getX(i), y = mSurfaceView.getHeight()-e.getY(i);
+		    		float dx = x-lastx, dy = y-lasty;
+		    		lastx = x;
+		    		lasty = y;
+		    		game.movePlayer(dx, dy);
 		    	}
 		    	break;
 		    }
@@ -103,7 +104,7 @@ public class GameActivity2 extends Activity {
 		    case MotionEvent.ACTION_POINTER_UP:
 		    case MotionEvent.ACTION_CANCEL: {
 		    	nbPointer--;
-		    	mActivePointers.remove(pointerId);
+		    	mActivePointers.removeAt(pointerId);
 		    	break;
 		    }
 	    }

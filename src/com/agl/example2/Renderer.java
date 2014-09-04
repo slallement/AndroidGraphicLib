@@ -1,5 +1,6 @@
 package com.agl.example2;
 
+import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
@@ -8,17 +9,19 @@ import android.opengl.Matrix;
 import android.os.SystemClock;
 
 import com.agl.example.GLRenderer;
+import com.agl.graphics.Sprite;
 import com.android.GLText.GLText;
 
 /**
  * @author Sergu
  * Test application
  */
-public class Renderer extends GLRenderer {
+public abstract class Renderer extends GLRenderer {
 	float[] mProjMatrix = new float[16];
 	float[] mVMatrix = new float[16];
 	float[] mMVPMatrix = new float[16];
 	private GLText glText; 
+	
 	Renderer(Context c)
 	{
 		super(c);
@@ -26,26 +29,36 @@ public class Renderer extends GLRenderer {
 	
 	@Override
 	public void onCreate(int width, int height, boolean contextLost) {
-		glText = new GLText(mContext.getAssets());
-        glText.load("ARBONNIE.ttf", 32, 2, 2 );
+		Sprite.setShadersInit(false);
+		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+		GLES20.glClearColor(0f, 0f, 0f, 1f);
 	}
 
 	@Override
 	public void onDrawFrame(GL10 arg0) {
 		computeFPS();
-		long time2 = SystemClock.uptimeMillis();
-		
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
 		scene();
-	}
-
-	public void scene(){
+		
+		// text
 		glText.begin( 1.0f, 1.0f, 1.0f, 1.0f, mMVPMatrix ); // Begin Text Rendering (Set Color WHITE)
 		GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA); // active transparent bg
-        glText.drawC("Nothing yet ! Under development", 200.f, 300.f,0.f);
+        glText.drawC("FPS :"+mFPS, 20.f, 10.f,0.f);
         glText.end();
+	}
+
+	public abstract void scene();
+	
+	public void draw(Sprite s){
+		s.draw(mMVPMatrix);
+	}
+	
+	@Override
+	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
+        glText = new GLText(mContext.getAssets());
+        glText.load( "ARBONNIE.ttf", 32, 2, 2 ); // Create Font (Height: 14 Pixels / X+Y Padding 2 Pixels)
 	}
 	
 	@Override

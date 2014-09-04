@@ -30,7 +30,7 @@ public abstract class Sprite {
 	float trans[] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 	boolean transformed;
 	float w, h;
-	float x, y;
+	float x, y; // position
 
 	// number of coordinates per vertex in this array
 	static final int TEX_COORDS_PER_VERTEX = 2;
@@ -100,7 +100,7 @@ public abstract class Sprite {
 		texCoordBuffer.position(0);
 	}
 
-	protected void setDefaultShaders() {
+	static protected void setDefaultShaders() {
 		if (!isShadersInit()) {
 			mProgram = GLES20.glCreateProgram();// create empty OpenGL Program
 			int vertexShader = MUtils.loadShader(GLES20.GL_VERTEX_SHADER,
@@ -146,6 +146,26 @@ public abstract class Sprite {
 		color[0] = r;
 		color[1] = g;
 		color[2] = b;
+	}
+	
+	/** Translate the shape from origin 
+	 * @param x
+	 * @param y
+	 */
+	public void setPosition(float newX, float newY){
+		Matrix.translateM(trans, 0, newX-x, newY-y, 0);
+		x = newX;
+		y = newY;
+	}
+	
+	/** Translate the shape from its current position
+	 * @param x
+	 * @param y
+	 */
+	public void move(float dx, float dy){
+		x += dx;
+		y += dy;
+		Matrix.translateM(trans, 0, dx, dy, 0);
 	}
 
 	/**
