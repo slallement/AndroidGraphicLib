@@ -386,4 +386,11 @@ public abstract class Sprite {
 	public static void setShadersInit(boolean shadersInit) {
 		Sprite.shadersInit = shadersInit;
 	}
+	
+	public float getX(){
+		return x;
+	}
+	public float getY(){
+		return y;
+	}
 }

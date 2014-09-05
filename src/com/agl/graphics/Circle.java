@@ -69,4 +69,10 @@ public class Circle extends Sprite {
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vertexCount);
 	}
 	
+	/**
+	 * @return the radius of the circle
+	 */
+	public float getRadius(){
+		return h;
+	}
 }

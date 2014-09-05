@@ -20,7 +20,9 @@ public abstract class Renderer extends GLRenderer {
 	float[] mProjMatrix = new float[16];
 	float[] mVMatrix = new float[16];
 	float[] mMVPMatrix = new float[16];
-	private GLText glText; 
+
+	long t1;
+	double dt;
 	
 	Renderer(Context c)
 	{
@@ -37,16 +39,14 @@ public abstract class Renderer extends GLRenderer {
 	@Override
 	public void onDrawFrame(GL10 arg0) {
 		computeFPS();
+		long t2 = System.currentTimeMillis();
+		dt = (t2-t1)/1000.0;
+		t1 = t2;
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
 		scene();
 		
-		// text
-		glText.begin( 1.0f, 1.0f, 1.0f, 1.0f, mMVPMatrix ); // Begin Text Rendering (Set Color WHITE)
-		GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA); // active transparent bg
-        glText.drawC("FPS :"+mFPS, 20.f, 10.f,0.f);
-        glText.end();
+
 	}
 
 	public abstract void scene();
@@ -57,8 +57,6 @@ public abstract class Renderer extends GLRenderer {
 	
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-        glText = new GLText(mContext.getAssets());
-        glText.load( "ARBONNIE.ttf", 32, 2, 2 ); // Create Font (Height: 14 Pixels / X+Y Padding 2 Pixels)
 	}
 	
 	@Override
