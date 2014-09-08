@@ -18,6 +18,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import com.agl.graphics.Circle;
+import com.agl.graphics.GLRenderer;
 import com.agl.graphics.Layer;
 import com.agl.graphics.PolyLine;
 import com.agl.graphics.Polygon;
@@ -41,9 +42,7 @@ import android.util.Log;
  * Test application
  */
 public class GLES20Renderer extends GLRenderer {
-	float[] mProjMatrix = new float[16];
-	float[] mVMatrix = new float[16];
-	float[] mMVPMatrix = new float[16];
+	
 	private float[] mTriMat = new float[16];
 	float mPx = 0.f;
 	float mPy = 0.f;
@@ -53,7 +52,6 @@ public class GLES20Renderer extends GLRenderer {
 	float destX = 0.f;
 	float destY = 0.f;
 	float dt = 0.f;
-	long nbFrameElapsed = 0;
 	long time1 = 0L;
 	
 	
@@ -68,7 +66,7 @@ public class GLES20Renderer extends GLRenderer {
 	protected Rect s3 = null;
 	protected Shaders s_s3 = null;
 	public ArrayList<PolyLine> s_line = new ArrayList<PolyLine>();
-	
+
 	protected float beginTime = (float)SystemClock.uptimeMillis();
 	
 	public GLES20Renderer(Context c) {
@@ -79,16 +77,15 @@ public class GLES20Renderer extends GLRenderer {
 		s_line.add(new PolyLine());
 		
 		//s_line.get(s_line.size()-1).setTexture(R.drawable.blank);
-		s_line.get(s_line.size()-1).setColor(1.f, 1.f, 0.f);
+		//s_line.get(s_line.size()-1).setColor(1.f, 1.f, 0.f,1.f);
 	}
 	
 	@Override
 	public void onCreate(int width, int height, boolean contextLost) {
 		// init 
-		
-		
-		Sprite.setShadersInit(false);
+		super.onCreate(width, height, contextLost);
 		Log.v("tag","crea");
+		//PolyLine po = new PolyLine();
 		/*s_line = new PolyLine();
 		s_line.setTexture(R.drawable.blank);
 		s_line.setColor(1.f, 1.f, 0.f);*/
@@ -140,7 +137,7 @@ public class GLES20Renderer extends GLRenderer {
 	}
 
 	public void subScene() {
-		float aaa = time1*0.01f;
+		float aaa = time1*0.02f;
 		mTest.setRotation2(aaa);
 		s1.setRotation2(aaa);
 		mTest.draw(mMVPMatrix);
@@ -181,7 +178,7 @@ public class GLES20Renderer extends GLRenderer {
 		/*float ttt = ((float) (time1)-beginTime)*0.001f;
 		if(ttt>lambda)beginTime+=lambda;
 		while(ttt>lambda)ttt-=lambda;*/
-		float ttt = nbFrameElapsed * 0.01f;
+		float ttt = (float)nbFrameElapsed/60.f * 1.0f;
 		
 		s_s3.set("uTime", ttt);
 		s3.draw(scratch,s_s3);
@@ -199,9 +196,10 @@ public class GLES20Renderer extends GLRenderer {
         for(int i=0;i<s_line.size();i++){
         	s_line.get(i).draw(mMVPMatrix);
         }
+        /* takes a screenshot
         if(n_screenshot % 2 == 0)
         	captureScreenShot("/screenshot/", "screen.png" );
-        n_screenshot++;
+        n_screenshot++;*/
 	}
 	
 	public void draw(Sprite s){

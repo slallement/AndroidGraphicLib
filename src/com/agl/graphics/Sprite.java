@@ -75,14 +75,8 @@ public abstract class Sprite {
 		vertexCount = mCoords.length / COORDS_PER_VERTEX;
 
 		// initialize vertex byte buffer for shape coordinates
-		ByteBuffer bb = ByteBuffer.allocateDirect(mCoords.length * 4); // (number
-																		// of
-																		// coordinate
-																		// values
-																		// * 4
-																		// bytes
-																		// per
-																		// float)
+		ByteBuffer bb = ByteBuffer.allocateDirect(mCoords.length * 4); 
+		// (number  of coordinate  values * 4 bytes  per float)
 		bb.order(ByteOrder.nativeOrder()); // use the device hardware's native
 											// byte order
 		vertexBuffer = bb.asFloatBuffer(); // create a floating point buffer
@@ -113,7 +107,7 @@ public abstract class Sprite {
 			GLES20.glAttachShader(mProgram, fragmentShader);
 			// add the fragment shader to program
 			GLES20.glLinkProgram(mProgram);
-			idNoTexture = MUtils.loadTexture(GLES20Renderer.getContext(),
+			idNoTexture = MUtils.loadTexture(GLRenderer.getContext(),
 					R.drawable.blank)[0];
 			setShadersInit(true);
 		}
@@ -217,7 +211,7 @@ public abstract class Sprite {
 	public void setTexture(int id)
 	// id is a ressource identifier
 	{
-		mTexDataHandle = MUtils.loadTexture(GLES20Renderer.getContext(), id)[0];
+		mTexDataHandle = MUtils.loadTexture(GLRenderer.getContext(), id)[0];
 	}
 
 	/* public void setShaders(String path1, String path2){
@@ -233,7 +227,7 @@ public abstract class Sprite {
 	// id is a ressource identifier
 	// this method adapt the size to fit the texture
 	{
-		int data[][] = MUtils.loadTexture2(GLES20Renderer.getContext(), id);
+		int data[][] = MUtils.loadTexture2(GLRenderer.getContext(), id);
 		mTexDataHandle = data[0][0];
 		w = data[1][0];
 		h = data[2][0];

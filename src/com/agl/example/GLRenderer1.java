@@ -14,6 +14,8 @@ import java.util.Date;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.agl.graphics.GLRenderer;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
@@ -21,7 +23,7 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.os.Environment;
 import android.util.Log;
 
-public abstract class GLRenderer implements Renderer {
+public abstract class GLRenderer1 implements Renderer {
 
     /*private boolean mFirstDraw;*/
     protected boolean mSurfaceCreated;
@@ -30,10 +32,10 @@ public abstract class GLRenderer implements Renderer {
     protected long mLastTime;
     protected int mFPStemp = 0;
     protected int mFPS;
-    protected int nbFrameElapsed = 0;
+    protected long nbFrameElapsed = 0;
     protected static Context mContext;
 
-    public GLRenderer() {
+    public GLRenderer1() {
         /*mFirstDraw = true;*/
         mSurfaceCreated = false;
         mWidth = -1;
@@ -42,7 +44,7 @@ public abstract class GLRenderer implements Renderer {
         mFPS = 0;
     }
     
-    public GLRenderer(Context c) {
+    public GLRenderer1(Context c) {
         /*mFirstDraw = true;*/
         mSurfaceCreated = false;
         mWidth = -1;
@@ -129,91 +131,13 @@ public abstract class GLRenderer implements Renderer {
 
     public abstract void onCreate(int width, int height, boolean contextLost);
     
-	private  File getOutputMediaFile(){
-	    // To be safe, you should check that the SDCard is mounted
-	    // using Environment.getExternalStorageState() before doing this. 
-	    File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
-	            + "/Android/data/"
-	            + mContext.getPackageName()
-	            + "/Files"); 
+    // getOutputMediaFile(nbFrameElapsed)
 
-	    // This location works best if you want the created images to be shared
-	    // between applications and persist after your app has been uninstalled.
-
-	    // Create the storage directory if it does not exist
-	    if (! mediaStorageDir.exists()){
-	        if (! mediaStorageDir.mkdirs()){
-	            return null;
-	        }
-	    }
-	    // Create a media file name
-	    String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm_SS").format(new Date());
-	    File mediaFile;
-        //String mImageName = "IMG_"+ timeStamp +".jpg";
-	    String mImageName = "IMG_"+ nbFrameElapsed +".jpg";
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);  
-	    return mediaFile;
-	} 
-
-	public Bitmap captureScreenShot() {
-		int width = mWidth; // use your favorite width
-		int height = mHeight; // use your favorite height
-		int screenshotSize = width * height;
-		ByteBuffer bb = ByteBuffer.allocateDirect( screenshotSize * 4 );
-		bb.order( ByteOrder.nativeOrder() );
-		// any opengl context will do
-		GLES20.glReadPixels( 0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, bb );
-		int pixelsBuffer[] = new int[screenshotSize];
-		bb.asIntBuffer().get( pixelsBuffer );
-		bb = null;
-		Bitmap bitmap = Bitmap.createBitmap( width, height, Bitmap.Config.RGB_565 );
-		bitmap.setPixels( pixelsBuffer, screenshotSize - width, -width, 0, 0, width, height );
-		pixelsBuffer = null;
-
-		short sBuffer[] = new short[screenshotSize];
-		ShortBuffer sb = ShortBuffer.wrap( sBuffer );
-		bitmap.copyPixelsToBuffer( sb );
-
-		//Making created bitmap (from OpenGL points) compatible with Android bitmap
-		for ( int i = 0; i < screenshotSize; ++i ) {
-			short v = sBuffer[i];
-			sBuffer[i] = ( short ) ( ( ( v & 0x1f ) << 11 ) | ( v & 0x7e0 ) | ( ( v & 0xf800 ) >> 11 ) );
-		}
-		sb.rewind();
-		bitmap.copyPixelsFromBuffer( sb );
-		return bitmap;
-	}
-	
-	public void saveBitmap(Bitmap screenshot, String filePath,  String fileName) {
-		/*OutputStream outStream = null;
-		filePath = Environment.getExternalStorageDirectory().toString() + "/" + filePath;
-		File dir = new File( filePath );
-		dir.mkdirs();
-		File output = new File( filePath, fileName );
-		*/
-		String TAG = "screenshot";
-		File imgFile = getOutputMediaFile();
-	    if (imgFile == null) {
-	        Log.d(TAG,
-	                "Error creating media file, check storage permissions: ");// e.getMessage());
-	        return;
-	    } 
-	    try {
-	        FileOutputStream fos = new FileOutputStream(imgFile);
-	        screenshot.compress(Bitmap.CompressFormat.PNG, 90, fos);
-	        fos.close();
-	        //Log.d(TAG, "screenshot ok");
-	    } catch (FileNotFoundException e) {
-	        Log.d(TAG, "File not found: " + e.getMessage());
-	    } catch (IOException e) {
-	        Log.d(TAG, "Error accessing file: " + e.getMessage());
-	    }  
-	}
 
 	/** Require the context to be set */
 	public void captureScreenShot(final String path, final String fileName) {
-		Bitmap screenshot = captureScreenShot();
-		saveBitmap(screenshot, path, fileName);
+		Bitmap screenshot = GLRenderer.captureScreenShot(mWidth,mHeight);
+		GLRenderer.saveBitmap(screenshot, path, "IMG_"+nbFrameElapsed);
 		screenshot.recycle();
 	}
 	

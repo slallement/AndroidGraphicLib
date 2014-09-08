@@ -3,6 +3,9 @@ package com.agl.example2;
 import java.util.ArrayList;
 
 import com.agl.graphics.Circle;
+import com.agl.graphics.GLRenderer;
+import com.agl.graphics.PolyLine;
+import com.agl.graphics.Trail;
 import com.android.GLText.GLText;
 
 import android.content.Context;
@@ -16,12 +19,15 @@ import android.util.Log;
  * @author Serguei Lallement
  *
  */
-public class DemoGame extends Renderer {
+public class DemoGame extends GLRenderer {
 
 	Circle player = null;
 	ArrayList<Circle> ennemies = new ArrayList<Circle>();
 	Clock clock1 = new Clock();
 	private GLText glText;
+	public PolyLine polyline;
+	public PolyLine polyline2;
+	public Trail trail;
 	
 	DemoGame(Context c) {
 		super(c);
@@ -30,7 +36,27 @@ public class DemoGame extends Renderer {
 	@Override
 	public void onCreate(int width, int height, boolean contextLost) {
 		super.onCreate(width, height, contextLost);
-		player = new Circle(50.f,100);
+		polyline = new PolyLine();
+		trail = new Trail();
+		trail.setThickness(5.f);
+		trail.setPosition(mWidth/2.f, mHeight/2.f);
+        
+        polyline2 = new PolyLine(8.f, 
+        		new float[]{100.f,10.f,
+							100.f,200.f,
+							200.f,300.f,
+							//500f,500f,
+							//500f,200f
+							});
+        
+        polyline.addPoint(101f, 301f);
+        polyline.addPoint(201f, 310f);
+        polyline.addPoint(301f, 330f);
+        for(int i=0;i<10;++i)
+        	polyline.addPoint(301f+100.f*(float)Math.cos(i*0.1), 330f+200.f*(float)Math.sin(i*0.1));
+        //polyline.setColor(1.f, 0.f, 1.f,0.5f);
+        
+        player = new Circle(50.f,100);
 		player.setColor(0.0f, 1.0f, 0.0f);
 		player.move(mWidth/2, mHeight/2); // center
 		
@@ -99,22 +125,40 @@ public class DemoGame extends Renderer {
 		display();
 	}
 	
+	double t1 = 0;
 	void display()
 	{
+		draw(polyline2);
 		draw(player);
 		for(Circle c : ennemies){
 			draw(c);
 		}
+		
 		// text
 		glText.begin( 1.0f, 1.0f, 1.0f, 1.0f, mMVPMatrix ); // Begin Text Rendering (Set Color WHITE)
 		GLES20.glEnable(GLES20.GL_BLEND);
-        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA); // active transparent bg
-        glText.drawC("Avoid the red circles", mWidth/2.f, mHeight*4.f/5.f, 0.f);
-        glText.end();
+		GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA); // active transparent bg
+		glText.drawC("Avoid the red circles", mWidth/2.f, mHeight*4.f/5.f, 0.f);
+		glText.end();
+		
+		draw(polyline);
+		draw(trail);
+
+		if(dt < 1000.0){
+			t1 += dt;
+			trail.update(dt);
+			trail.setOrigin(
+					(float)(100.0*Math.cos(2.0*t1)),
+					(float)(200.0*Math.sin(2.0*t1))
+					);
+		}
 	}
 
 	public void movePlayer(float dx, float dy) {
+		if(player == null)
+			return;
 		player.move(dx, dy);
+		//trail.moveOrigin(dx,dy);
 	}
 	
 	public class Clock {

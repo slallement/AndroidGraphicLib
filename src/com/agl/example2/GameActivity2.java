@@ -1,5 +1,7 @@
 package com.agl.example2;
 
+import com.agl.graphics.PolyLine;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;

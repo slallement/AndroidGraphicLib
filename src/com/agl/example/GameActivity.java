@@ -131,7 +131,7 @@ public class GameActivity extends Activity {
 		    case MotionEvent.ACTION_POINTER_DOWN: {
 		    	mRenderer.addLine();
 		    	nbPointer++;
-		    	mRenderer.s_line.get(mRenderer.s_line.size()-1).setColor(nbPointer*1.f/e.getPointerCount(), 1.f, 0.f);
+		    	//mRenderer.s_line.get(mRenderer.s_line.size()-1).setColor(nbPointer*1.f/e.getPointerCount(), 1.f, 0.f,1.f);
 		    	mActivePointers.put(pointerId, mRenderer.s_line.size()-1);
 		    	// mActive pointer has the right position in the list associed to the right id of a finger
 		    	break;
@@ -145,6 +145,7 @@ public class GameActivity extends Activity {
 		    			
 		    			line.addPoint(e.getX(i), mSurfaceView.getHeight()-e.getY(i));
 		    		}
+		    			
 		    	}
 		    	break;
 		    }
