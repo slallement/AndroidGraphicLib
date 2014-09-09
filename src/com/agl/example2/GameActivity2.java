@@ -1,6 +1,5 @@
 package com.agl.example2;
 
-import com.agl.graphics.PolyLine;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -8,8 +7,6 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -92,8 +89,8 @@ public class GameActivity2 extends Activity {
 		    }
 		    case MotionEvent.ACTION_MOVE: { // a pointer was moved
 		    	for (int size = e.getPointerCount(), i = 0; i < size; i++) {
-		    		int id = e.getPointerId(i);
-		    		int pos = mActivePointers.get(e.getPointerId(i));
+		    		//int id = e.getPointerId(i);
+		    		//int pos = mActivePointers.get(e.getPointerId(i));
 		    		final float x = e.getX(i), y = mSurfaceView.getHeight()-e.getY(i);
 		    		float dx = x-lastx, dy = y-lasty;
 		    		lastx = x;

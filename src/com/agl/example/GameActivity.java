@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -45,8 +44,7 @@ public class GameActivity extends Activity {
 			mSurfaceView.setRenderer(mRenderer);
 			setContentView(mSurfaceView);
 		} else {
-			// Time to get a new phone, OpenGL ES 2.0 not
-			// supported.
+			// Time to get a new phone, OpenGL ES 2.0 not supported.
 			info = new TextView(this);
 			info.setText("OpenGL ES 2.0 not supported ... ");
 			setContentView(info);
@@ -138,7 +136,7 @@ public class GameActivity extends Activity {
 		    }
 		    case MotionEvent.ACTION_MOVE: { // a pointer was moved
 		    	for (int size = e.getPointerCount(), i = 0; i < size; i++) {
-		    		int id = e.getPointerId(i);
+		    		//int id = e.getPointerId(i);
 		    		int pos = mActivePointers.get(e.getPointerId(i));
 		    		PolyLine line = mRenderer.s_line.get(pos);
 		    		if (line != null) {

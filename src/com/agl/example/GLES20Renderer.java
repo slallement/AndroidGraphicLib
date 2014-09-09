@@ -2,17 +2,7 @@ package com.agl.example;
 
 import com.agl.graphics.R;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -20,6 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 import com.agl.graphics.Circle;
 import com.agl.graphics.GLRenderer;
 import com.agl.graphics.Layer;
+import com.agl.graphics.MUtils;
 import com.agl.graphics.PolyLine;
 import com.agl.graphics.Polygon;
 import com.agl.graphics.Rect;
@@ -30,10 +21,8 @@ import com.android.GLText.GLText;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -77,8 +66,13 @@ public class GLES20Renderer extends GLRenderer {
 		s_line.add(new PolyLine());
 		
 		//s_line.get(s_line.size()-1).setTexture(R.drawable.blank);
-		//s_line.get(s_line.size()-1).setColor(1.f, 1.f, 0.f,1.f);
+		float color[] = MUtils.hsvToRgb((float)Math.random(), 0.9f, 0.95f);
+		s_line.get(s_line.size()-1).setColorRGBA(
+				new float[]{color[0], color[1], color[2],1.f,
+						color[0], color[1], color[2],0.f});
 	}
+	
+	
 	
 	@Override
 	public void onCreate(int width, int height, boolean contextLost) {

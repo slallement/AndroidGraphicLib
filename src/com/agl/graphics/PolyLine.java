@@ -88,7 +88,7 @@ public class PolyLine extends Sprite {
         setCoords();
 	}
 	
-	private void reallocatePoints(int newSize){
+	protected void reallocatePoints(int newSize){
 		float temp[] = new float[newSize];
 		final int size = Math.min(newSize, points.length);
 		for(int i=0;i<size;++i){
@@ -225,48 +225,47 @@ public class PolyLine extends Sprite {
 	protected void initColorBuffer() {
 		if(mCoords.length == 0)
 			return;
-		mColors = new float[]{1.f, 0.f  , 0.f, 1.f,
-							  0.f, 1.f  , 0.f, 1.f,
-							  //0.f, 1.f  , 1.f, 1.f
-							};
+
 		
 		mColorBuf = new float[mCoords.length / COORDS_PER_VERTEX * 4];
 		for(int i=0;i<mColorBuf.length;++i){
 			mColorBuf[i] = 1.f;
 		}
-		if(colorMode == ColorMode.LOOP){
-			for(int i=0;i<mColorBuf.length/8;++i){
-				int id = (i)%(mColors.length/4);
-				for(int j=0;j<4;++j){
-					mColorBuf[8*i+j] = mColors[4*id+j];
-					mColorBuf[4+8*i+j] = mColors[4*id+j];
+		if(mColors != null){
+			if(colorMode == ColorMode.LOOP){
+				for(int i=0;i<mColorBuf.length/8;++i){
+					int id = (i)%(mColors.length/4);
+					for(int j=0;j<4;++j){
+						mColorBuf[8*i+j] = mColors[4*id+j];
+						mColorBuf[4+8*i+j] = mColors[4*id+j];
+					}
 				}
-			}
-		}else if(colorMode == ColorMode.REPEAT_FIRST){
-			for(int i=0;i<mColorBuf.length/4-(mColors.length/4);++i){
-				for(int j=0;j<4;++j){
-					mColorBuf[4*i+j] = mColors[j];
+			}else if(colorMode == ColorMode.REPEAT_FIRST){
+				for(int i=0;i<mColorBuf.length/4-(mColors.length/4);++i){
+					for(int j=0;j<4;++j){
+						mColorBuf[4*i+j] = mColors[j];
+					}
 				}
-			}
-			int offset = mColorBuf.length-(mColors.length%mColorBuf.length)-8;
-			if(offset < 0) offset = 0; // security ?
-			for(int i = 0; i<mColors.length/4; ++i){
-				for(int j=0;j<4;++j){
-					mColorBuf[offset+8*i+j] = mColors[4*i+j];
-					mColorBuf[offset+4+8*i+j] = mColors[4*i+j];
+				int offset = mColorBuf.length-(mColors.length%mColorBuf.length)-8;
+				if(offset < 0) offset = 0; // security ?
+				for(int i = 0; i<mColors.length/4; ++i){
+					for(int j=0;j<4;++j){
+						mColorBuf[offset+8*i+j] = mColors[4*i+j];
+						mColorBuf[offset+4+8*i+j] = mColors[4*i+j];
+					}
 				}
-			}
-		} else if(colorMode == ColorMode.REPEAT_FIRST_INVERSE){
-			for(int i=mColors.length/4;i<mColorBuf.length/4;++i){
-				for(int j=0;j<4;++j){
-					mColorBuf[4*i+j] = mColors[j];
+			} else if(colorMode == ColorMode.REPEAT_FIRST_INVERSE){
+				for(int i=mColors.length/4;i<mColorBuf.length/4;++i){
+					for(int j=0;j<4;++j){
+						mColorBuf[4*i+j] = mColors[j];
+					}
 				}
-			}
-			
-			for(int i = 0; i<mColors.length/4; ++i){
-				for(int j=0;j<4;++j){
-					mColorBuf[8*i+j] = mColors[mColors.length-4-4*i+j];
-					mColorBuf[4+8*i+j] = mColors[mColors.length-4-4*i+j];
+				
+				for(int i = 0; i<mColors.length/4; ++i){
+					for(int j=0;j<4;++j){
+						mColorBuf[8*i+j] = mColors[mColors.length-4-4*i+j];
+						mColorBuf[4+8*i+j] = mColors[mColors.length-4-4*i+j];
+					}
 				}
 			}
 		}
@@ -345,5 +344,18 @@ public class PolyLine extends Sprite {
 
 	public void setThickness(float nthickness){
 		thickness = nthickness;
+	}
+	
+	public void setColor(float[] ncolor){
+		for(int i=0;i<ncolor.length/3;++i){
+			mColors[4*i+0] = ncolor[3*i+0];
+			mColors[4*i+1] = ncolor[3*i+1];
+			mColors[4*i+2] = ncolor[3*i+2];
+			mColors[4*i+3] = 1.0f; // alpha
+		}
+	}
+	
+	public void setColorRGBA(float[] ncolor){
+		mColors = ncolor.clone();
 	}
 }

@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 import com.agl.graphics.Circle;
 import com.agl.graphics.GLRenderer;
-import com.agl.graphics.PolyLine;
 import com.agl.graphics.Trail;
 import com.android.GLText.GLText;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.Log;
 
 /** A little game for demo
  * you can move a green circle and your goal is to avoid the red moving circle
@@ -25,8 +23,6 @@ public class DemoGame extends GLRenderer {
 	ArrayList<Circle> ennemies = new ArrayList<Circle>();
 	Clock clock1 = new Clock();
 	private GLText glText;
-	public PolyLine polyline;
-	public PolyLine polyline2;
 	public Trail trail;
 	
 	DemoGame(Context c) {
@@ -36,25 +32,14 @@ public class DemoGame extends GLRenderer {
 	@Override
 	public void onCreate(int width, int height, boolean contextLost) {
 		super.onCreate(width, height, contextLost);
-		polyline = new PolyLine();
 		trail = new Trail();
-		trail.setThickness(5.f);
+		trail.setThickness(2.f);
 		trail.setPosition(mWidth/2.f, mHeight/2.f);
+		trail.setColorRGBA(new float[]{
+				0.0f,0.7f,0.0f,1.0f,
+				0.0f,5.0f,0.0f,0.0f
+		});
         
-        polyline2 = new PolyLine(8.f, 
-        		new float[]{100.f,10.f,
-							100.f,200.f,
-							200.f,300.f,
-							//500f,500f,
-							//500f,200f
-							});
-        
-        polyline.addPoint(101f, 301f);
-        polyline.addPoint(201f, 310f);
-        polyline.addPoint(301f, 330f);
-        for(int i=0;i<10;++i)
-        	polyline.addPoint(301f+100.f*(float)Math.cos(i*0.1), 330f+200.f*(float)Math.sin(i*0.1));
-        //polyline.setColor(1.f, 0.f, 1.f,0.5f);
         
         player = new Circle(50.f,100);
 		player.setColor(0.0f, 1.0f, 0.0f);
@@ -126,9 +111,9 @@ public class DemoGame extends GLRenderer {
 	}
 	
 	double t1 = 0;
+	double q = 5.0/2;
 	void display()
 	{
-		draw(polyline2);
 		draw(player);
 		for(Circle c : ennemies){
 			draw(c);
@@ -141,15 +126,17 @@ public class DemoGame extends GLRenderer {
 		glText.drawC("Avoid the red circles", mWidth/2.f, mHeight*4.f/5.f, 0.f);
 		glText.end();
 		
-		draw(polyline);
 		draw(trail);
 
 		if(dt < 1000.0){
-			t1 += dt;
+			t1 += dt*5.0;
 			trail.update(dt);
+			trail.setRotation((float) t1*3.1416f);
 			trail.setOrigin(
-					(float)(100.0*Math.cos(2.0*t1)),
-					(float)(200.0*Math.sin(2.0*t1))
+					(float)(100.0/q*( (q-1.0)*Math.cos(t1))+20.0*Math.cos( (q-1.0)*t1) ),
+					(float)(100.0/q*( (q-1.0)*Math.sin(t1))-20.0*Math.sin( (q-1.0)*t1) )
+					//(float)(100.0*Math.cos(2.0*t1)),
+					//(float)(100.0*Math.sin(2.0*t1))
 					);
 		}
 	}
@@ -158,7 +145,7 @@ public class DemoGame extends GLRenderer {
 		if(player == null)
 			return;
 		player.move(dx, dy);
-		//trail.moveOrigin(dx,dy);
+		trail.move(dx,dy);
 	}
 	
 	public class Clock {
