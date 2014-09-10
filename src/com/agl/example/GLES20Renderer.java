@@ -67,7 +67,7 @@ public class GLES20Renderer extends GLRenderer {
 		
 		//s_line.get(s_line.size()-1).setTexture(R.drawable.blank);
 		float color[] = MUtils.hsvToRgb((float)Math.random(), 0.9f, 0.95f);
-		s_line.get(s_line.size()-1).setColorRGBA(
+		s_line.get(s_line.size()-1).setColor(
 				new float[]{color[0], color[1], color[2],1.f,
 						color[0], color[1], color[2],0.f});
 	}

@@ -261,7 +261,7 @@ public class PolyLine extends Sprite {
 					}
 				}
 				
-				for(int i = 0; i<mColors.length/4; ++i){
+				for(int i = 0; i<mColors.length/4 && (4+8*i+3)<mColorBuf.length; ++i){
 					for(int j=0;j<4;++j){
 						mColorBuf[8*i+j] = mColors[mColors.length-4-4*i+j];
 						mColorBuf[4+8*i+j] = mColors[mColors.length-4-4*i+j];
@@ -346,7 +346,7 @@ public class PolyLine extends Sprite {
 		thickness = nthickness;
 	}
 	
-	public void setColor(float[] ncolor){
+	public void setColorRGB(float[] ncolor){
 		for(int i=0;i<ncolor.length/3;++i){
 			mColors[4*i+0] = ncolor[3*i+0];
 			mColors[4*i+1] = ncolor[3*i+1];
@@ -355,7 +355,7 @@ public class PolyLine extends Sprite {
 		}
 	}
 	
-	public void setColorRGBA(float[] ncolor){
+	public void setColor(float[] ncolor){
 		mColors = ncolor.clone();
 	}
 }

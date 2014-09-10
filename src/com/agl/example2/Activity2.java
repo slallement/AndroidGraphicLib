@@ -13,7 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class GameActivity2 extends Activity {
+public class Activity2 extends Activity {
 	private TextView info = null;
 	private GLSurfaceView mSurfaceView = null;
 	private DemoGame game = null;

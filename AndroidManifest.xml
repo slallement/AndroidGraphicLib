@@ -32,7 +32,8 @@
             android:configChanges="orientation|keyboardHidden"
            >
         </activity>
-        <activity android:name="com.agl.example2.GameActivity2"></activity>
+        <activity android:name="com.agl.example2.Activity2"></activity>
+        <activity android:name="com.agl.example3.Activity3"></activity>
     </application>
 
 </manifest>

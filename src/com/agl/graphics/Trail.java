@@ -42,6 +42,22 @@ public class Trail extends PolyLine {
 	}
 	
 	/**
+	 * Set the position of the new points that will be added to the trail
+	 * @param norigin the new origin (copied)
+	 */
+	public void setOrigin(Vector2f norigin) {
+		origin = norigin.copy();
+	}
+	
+	/**
+	 * Link the position of the origin to the point given in parameter
+	 * @param norigin (the reference is keeped)
+	 */
+	public void linkOrigin(Vector2f norigin){
+		origin = norigin;
+	}
+	
+	/**
 	 * Move the position of the new points that will be added to the trail
 	 * @param nx
 	 * @param ny
@@ -50,14 +66,25 @@ public class Trail extends PolyLine {
 		origin.x += dx;
 		origin.y += dy;
 	}
+	
+	public void setLength(int length) {
+		if(length >= 0)
+			curveLength = length;
+	}
+	
+	public void setRefreshRate(double nrate){
+		refreshRate = nrate;
+	}
 
 	/**
 	 * should be called at each frame
 	 * @param dt
 	 */
 	public void update(double dt) {
+		if(dt > 1.0)
+			return;
 		time += dt;
-		if (time > refreshRate) {
+		while(time > refreshRate) {
 			time -= refreshRate;
 			updateTrail();
 		}

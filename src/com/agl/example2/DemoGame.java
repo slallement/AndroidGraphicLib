@@ -35,7 +35,7 @@ public class DemoGame extends GLRenderer {
 		trail = new Trail();
 		trail.setThickness(2.f);
 		trail.setPosition(mWidth/2.f, mHeight/2.f);
-		trail.setColorRGBA(new float[]{
+		trail.setColor(new float[]{
 				0.0f,0.7f,0.0f,1.0f,
 				0.0f,5.0f,0.0f,0.0f
 		});

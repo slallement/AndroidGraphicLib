@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class MainActivity extends Activity {
 
 	protected Button b_ex1 = null;
 	protected Button b_ex2 = null;
+	protected Button b_ex3 = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +36,29 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(MainActivity.this, com.agl.example2.GameActivity2.class);
+				Intent intent = new Intent(MainActivity.this, com.agl.example2.Activity2.class);
+				startActivity(intent);
+			}
+			
+		});
+		
+		LinearLayout layout = (LinearLayout)findViewById(R.id.LinearLayout1);
+		b_ex3 = new Button(layout.getContext());
+		b_ex3.setText("Demo 3");
+		layout.addView(b_ex3);
+		
+		//b_ex3 = (Button) findViewById(R.id.button3);
+		b_ex3.setOnClickListener(new View.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, com.agl.example3.Activity3.class);
 				startActivity(intent);
 			}
 			
 		});
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
