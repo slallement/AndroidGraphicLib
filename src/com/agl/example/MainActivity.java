@@ -1,5 +1,10 @@
 package com.agl.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.agl.example3.Activity3;
+import com.agl.example4.Activity4;
 import com.agl.graphics.R;
 
 import android.os.Bundle;
@@ -12,14 +17,18 @@ import android.widget.LinearLayout;
 
 public class MainActivity extends Activity {
 
+	protected LinearLayout layout;
 	protected Button b_ex1 = null;
 	protected Button b_ex2 = null;
 	protected Button b_ex3 = null;
+	protected List<Button> b_li = new ArrayList<Button>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		layout = (LinearLayout)findViewById(R.id.LinearLayout1);
+		
 		b_ex1 = (Button) findViewById(R.id.button1);
 		b_ex1.setOnClickListener(new View.OnClickListener(){
 
@@ -42,7 +51,7 @@ public class MainActivity extends Activity {
 			
 		});
 		
-		LinearLayout layout = (LinearLayout)findViewById(R.id.LinearLayout1);
+
 		b_ex3 = new Button(layout.getContext());
 		b_ex3.setText("Demo 3");
 		layout.addView(b_ex3);
@@ -57,8 +66,25 @@ public class MainActivity extends Activity {
 			}
 			
 		});
+		
+		addDemo(Activity4.class,"Demo 4");
 	}
-	
+
+	void addDemo(final Class<?> cls, String name){
+		b_li.add(new Button(layout.getContext()));
+		Button btn = b_li.get(b_li.size()-1);
+		btn.setText(name);
+		layout.addView(btn);
+		btn.setOnClickListener(new View.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, cls);
+				startActivity(intent);
+			}
+			
+		});
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -16,6 +16,13 @@ import android.opengl.GLUtils;
  * @author Sergu Useful class
  */
 public class MUtils {
+	/** operator modulus of double
+	 * exemples: mod( 1.2f , 2.f) = 1.2f
+	 * 			 mod( 2.2f , 2.f) = 0.2f
+	 * @return a%b*/
+	public static double mod(double a, double b){
+		return (a - ((b!=0) ? b*Math.floor(a/b):0f));
+	}
 	/**
 	 * return the texture handle (ref to int[])
 	 * 

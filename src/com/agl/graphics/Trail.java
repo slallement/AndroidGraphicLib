@@ -165,7 +165,7 @@ public class Trail extends PolyLine {
 				.sub(new Vector2f(points[pointsBegining + 2],
 						points[pointsBegining + 3])).getNormal();
 		d.normalize();
-		d.mul(thickness);
+		d.scale(thickness);
 		mCoords[0] = points[pointsBegining + 0] - d.x;
 		mCoords[1] = points[pointsBegining + 1] - d.y;
 		mCoords[2] = 0; // z axis
@@ -187,7 +187,7 @@ public class Trail extends PolyLine {
 			v2.normalize();
 			d = v0.add(v2).getNormal();
 			float dd = thickness / 2.f / Math.max(0.8f, d.dot(v0));
-			d.mul(dd);
+			d.scale(dd);
 
 			// point 1
 			mCoords[6 * i] = v1.x + d.x;
@@ -204,7 +204,7 @@ public class Trail extends PolyLine {
 				.sub(new Vector2f(points[offset - 2], points[offset - 1]))
 				.getNormal();
 		d.normalize();
-		d.mul(thickness / 1.f);
+		d.scale(thickness / 1.f);
 		mCoords[mCoords.length - 6] = points[offset - 2] - d.x;
 		mCoords[mCoords.length - 5] = points[offset - 1] - d.y;
 		mCoords[mCoords.length - 4] = 0; // z axis

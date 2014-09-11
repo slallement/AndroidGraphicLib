@@ -1,4 +1,4 @@
-package com.agl.example3;
+package com.agl.example4;
 
 import com.agl.graphics.GLRenderer;
 
@@ -14,7 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class Activity3 extends Activity {
+public class Activity4 extends Activity {
 	private TextView info = null;
 	private GLSurfaceView mSurfaceView = null;
 	private GLRenderer game = null;
@@ -33,7 +33,7 @@ public class Activity3 extends Activity {
 			mSurfaceView = new GLSurfaceView(this);
 			mSurfaceView.setEGLContextClientVersion(2);
 			//mSurfaceView.setPreserveEGLContextOnPause(true);
-			game = new Demo3(this.getApplicationContext());
+			game = new Demo4(this.getApplicationContext());
 			mSurfaceView.setRenderer(game);
 			setContentView(mSurfaceView);
 		} else {
@@ -92,8 +92,8 @@ public class Activity3 extends Activity {
 		    	for (int size = e.getPointerCount(), i = 0; i < size; i++) {
 		    		//int id = e.getPointerId(i);
 		    		//int pos = mActivePointers.get(e.getPointerId(i));
-		    		/*final float x = e.getX(i), y = mSurfaceView.getHeight()-e.getY(i);
-		    		float dx = x-lastx, dy = y-lasty;
+		    		//final float x = e.getX(i), y = mSurfaceView.getHeight()-e.getY(i);
+		    		/*float dx = x-lastx, dy = y-lasty;
 		    		lastx = x;
 		    		lasty = y;*/
 		    	}

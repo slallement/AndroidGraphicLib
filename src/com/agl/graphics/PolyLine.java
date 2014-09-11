@@ -108,7 +108,7 @@ public class PolyLine extends Sprite {
         Vector2f d;
         d = new Vector2f(points[0], points[1]).sub(new Vector2f(points[2], points[3])).getNormal();
         d.normalize();
-        d.mul(thickness);
+        d.scale(thickness);
         mCoords[0] = points[0]-d.x;
     	mCoords[1] = points[1]-d.y;
     	mCoords[2] = 0; // z axis
@@ -129,7 +129,7 @@ public class PolyLine extends Sprite {
         	v2.normalize();
         	d = v0.add(v2).getNormal();
         	float dd = thickness/2.f/Math.max(0.8f,d.dot(v0));
-        	d.mul(dd);
+        	d.scale(dd);
         	
         	// point 1
         	mCoords[6*i] = v1.x+d.x;
@@ -145,7 +145,7 @@ public class PolyLine extends Sprite {
         d = new Vector2f(points[pointsCount-4], points[pointsCount-3])
         		.sub(new Vector2f(points[pointsCount-2], points[pointsCount-1])).getNormal();
         d.normalize();
-        d.mul(thickness/1.f);
+        d.scale(thickness/1.f);
         mCoords[pointsCount*3-6] = points[pointsCount-2]-d.x;
     	mCoords[pointsCount*3-5] = points[pointsCount-1]-d.y;
     	mCoords[pointsCount*3-4] = 0; // z axis

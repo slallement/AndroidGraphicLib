@@ -85,6 +85,12 @@ public abstract class GLRenderer implements Renderer {
 		s.draw(mMVPMatrix);
 	}
 	
+	public void draw(Sprite[] s){
+		for(int i=0;i<s.length;++i){
+			s[i].draw(mMVPMatrix);
+		}
+	}
+	
 	@Override
 	public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 	}

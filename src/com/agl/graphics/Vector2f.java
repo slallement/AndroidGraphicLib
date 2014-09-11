@@ -1,7 +1,5 @@
 package com.agl.graphics;
 
-import android.util.Log;
-
 /**
  * class for representing 2d vectors
  * @author Serguei Lallement
@@ -44,12 +42,19 @@ public class Vector2f {
 		return new Vector2f(x+v.x, y+v.y);
 	}
 	
-	public void mul(float scale){
+	public Vector2f mul(float scale){
+		return new Vector2f(x *scale, y * scale);
+	}
+	
+	public Vector2f mul(float scalex, float scaley){
+		return new Vector2f(x * scalex, y * scaley);
+	}
+	public void scale(float scale){
 		x *= scale;
 		y *= scale;
 	}
 	
-	public void mul(float scalex, float scaley){
+	public void scale(float scalex, float scaley){
 		x *= scalex;
 		y *= scaley;
 	}
@@ -75,11 +80,11 @@ public class Vector2f {
 		return x*v2.x+y*v2.y;
 	}
 	
-	Vector2f getNormal() {
+	public Vector2f getNormal() {
 		return new Vector2f(-y,x);
 	}
 	
-	Vector2f copy() {
+	public Vector2f copy() {
 		return new Vector2f(x,y);
 	}
 	

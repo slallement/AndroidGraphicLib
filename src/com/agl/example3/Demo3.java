@@ -1,8 +1,6 @@
 package com.agl.example3;
 
 import android.content.Context;
-import android.util.Log;
-
 import com.agl.graphics.GLRenderer;
 import com.agl.graphics.MUtils;
 import com.agl.graphics.Trail;
@@ -16,6 +14,7 @@ public class Demo3 extends GLRenderer {
 	Vector2f[] curve_border_pos;
 	float curve_border_radius;
 	
+	
 	public Demo3(Context c){
 		super(c);
 		colors = new float[]{
@@ -24,12 +23,12 @@ public class Demo3 extends GLRenderer {
 				1.0f, 0.5f, 0.0f, 0.8f,
 				1.0f, 1.0f, 0.0f, 0.5f,
 				1.0f, 0.0f, 0.0f, 0.f};
+		
 	}
 	
 	@Override
 	public void onCreate(int width, int height, boolean contextLost) {
 		super.onCreate(width, height, contextLost);
-
 		trail1 = new Trail();
 		trail1.setThickness(1.f);
 		trail1.setLength(100);
@@ -62,21 +61,13 @@ public class Demo3 extends GLRenderer {
 			curve_border[i].linkOrigin(curve_border_pos[i]);
 			curve_border[i].move(curve_border_radius*(1+2*i),0.f);
 			curve_border[i].setLength(370);
-			curve_border[i].setRefreshRate(0.00001);
+			curve_border[i].setRefreshRate(0.01);
 		}
 	}
-	
-	/** operator modulus of double
-	 * exemples: mod( 1.2f , 2.f) = 1.2f
-	 * 			 mod( 2.2f , 2.f) = 0.2f
-	 * @return a%b*/
-	public static double mod(double a, double b){
-		return (a - ((b!=0) ? b*Math.floor(a/b):0f));
-	}
-	
+		
 	public static double fun1(double t, double val){
 		t *= 2.f;
-		return val*Math.abs(1.0-mod(t-val,val*2)/val );
+		return val*Math.abs(1.0-MUtils.mod(t-val,val*2)/val );
 	}
 	
 	public Vector2f letter_a(){
@@ -122,6 +113,16 @@ public class Demo3 extends GLRenderer {
 	public void scene() {
 		if(dt < 1.f)
 			t += dt;
+	
+		trail1.setOrigin(letter_a());
+		trail2.setOrigin(letter_g());
+		trail3.setOrigin(letter_l());
+		
+		trail1.update(dt);
+		trail2.update(dt);
+		trail3.update(dt);
+		
+
 		
 		for(int i=0;i<curve_border.length;++i){
 			double rt = t-3.1416;
@@ -131,17 +132,10 @@ public class Demo3 extends GLRenderer {
 			draw(curve_border[i]);
 		}
 	
-		trail1.setOrigin(letter_a());
-		trail2.setOrigin(letter_g());
-		trail3.setOrigin(letter_l());
-		
-		trail1.update(dt);
-		trail2.update(dt);
-		trail3.update(dt);
-	
 		draw(trail1);
 		draw(trail2);
 		draw(trail3);
+
 	}
 
 }
